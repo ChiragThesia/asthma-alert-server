@@ -17,7 +17,6 @@ router.get('/getUser/:id', auth.required, (req, res, next) => {
 });
 
 router.put('/updateUser/:id', auth.required, (req, res, next) => {
-  console.log('req.body', req.body);
   User.findByIdAndUpdate(req.params.id, req.body, { upsert: true, new: true })
     .then((user) => {
       if (!user) {
