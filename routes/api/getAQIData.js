@@ -14,7 +14,7 @@ router.get('/getAQIdata/:id', auth.required, async (req, res, next) => {
       aqiData: getAQIdata.data.data,
       aqiPref: aqiAlertLevel,
       location,
-      message: 'AQI Data Provided by AQI.Waqi',
+      message: 'Airquality Data provided by AQI.WAQI',
     });
   } catch (next) {
     console.log(error);
