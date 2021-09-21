@@ -29,12 +29,15 @@ router.put('/updateUser', auth.required, (req, res, next) => {
 
 router.post('/login', (req, res, next) => {
   console.log(req.body);
+  console.log('req.body.email', req.body.email);
+  console.log('req.body.password', req.body.password);
+
   if (!req.body.user.email) {
-    return res.status(422).json({ errors: { email: "can't be blank" }, error });
+    return res.status(422).json({ errors: { email: "can't be blank" } });
   }
 
   if (!req.body.user.password) {
-    return res.status(422).json({ errors: { password: "can't be blank" }, error });
+    return res.status(422).json({ errors: { password: "can't be blank" } });
   }
 
   passport.authenticate('local', { session: false }, (err, user, info) => {
@@ -44,9 +47,11 @@ router.post('/login', (req, res, next) => {
     }
 
     if (user) {
+      console.log('USER', user);
       user.token = user.generateJWT();
       return res.json({ user: user.toAuthJSON() });
     } else {
+      console.log('ELSE user', user);
       return res.status(422).json(info);
     }
   })(req, res, next);

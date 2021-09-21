@@ -7,7 +7,7 @@ const axios = require('axios');
 
 router.get('/getAQIdata/:id', auth.required, async (req, res, next) => {
   try {
-    const { aqiAlertLevel, location } = await User.findOne(req.param.id);
+    const { aqiAlertLevel, location } = await User.findById(req.params.id);
     const getAQIdata = await axios.get(`https://api.waqi.info/feed/${location}/?token=${process.env.AQIAPI_TOKEN}`);
 
     res.status(200).json({
