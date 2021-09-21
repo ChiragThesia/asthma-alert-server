@@ -28,6 +28,8 @@ router.put('/updateUser/:id', auth.required, (req, res, next) => {
     .catch(next);
 });
 
+//test
+
 router.post('/login', (req, res, next) => {
   if (!req.body.user.email) {
     return res.status(422).json({ errors: { email: "can't be blank" } });
