@@ -16,22 +16,19 @@ router.get('/getUser/:id', auth.required, (req, res, next) => {
     .catch(next);
 });
 
-router.put('/updateUser', auth.required, (req, res, next) => {
-  User.findOneAndUpdate(req.body.id, req.body, { upsert: true, new: true })
+router.put('/updateUser/:id', auth.required, (req, res, next) => {
+  console.log('req.body', req.body);
+  User.findByIdAndUpdate(req.params.id, req.body, { upsert: true, new: true })
     .then((user) => {
       if (!user) {
         res.sendStatus(401);
       }
-      res.json({ user: user.updatedUser() });
+      res.status(200).json({ user: user.updatedUser() });
     })
     .catch(next);
 });
 
 router.post('/login', (req, res, next) => {
-  console.log(req.body);
-  console.log('req.body.email', req.body.email);
-  console.log('req.body.password', req.body.password);
-
   if (!req.body.user.email) {
     return res.status(422).json({ errors: { email: "can't be blank" } });
   }
@@ -42,17 +39,14 @@ router.post('/login', (req, res, next) => {
 
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) {
-      console.log(err);
-      return next(err);
+      res.status(422).json({ errors: { 'email or password': 'is invasdfsflid' } });
     }
 
     if (user) {
-      console.log('USER', user);
       user.token = user.generateJWT();
-      return res.json({ user: user.toAuthJSON() });
+      return res.status(200).json({ user: user.toAuthJSON() });
     } else {
-      console.log('ELSE user', user);
-      return res.status(422).json(info);
+      return res.status(422).json({ message: 'No user found' });
     }
   })(req, res, next);
 });
